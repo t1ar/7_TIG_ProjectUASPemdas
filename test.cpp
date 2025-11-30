@@ -22,6 +22,11 @@ struct structItem {
 
 // declare functions
 
+void Save(string Filename) {
+    
+}
+
+
 int Beli() {
     
 }
