@@ -22,10 +22,6 @@ struct structItem {
 
 // declare functions
 
-void Save(string Filename) {
-    
-}
-
 
 int Beli() {
     
@@ -42,22 +38,13 @@ int main() {
     string Nama_Item, Jumlah;
     profit.open("Profit.txt");
     profit >> Money; //get the line for MONEYYYYYY
-    stock.open("Stock.txt"); //format Stock.txt = Nama Item\n Jumlah 
+    profit.close();  //dont forget to close file
+    stock.open("Stock.txt");  
     for (int i = 0; i < MAX; i++) {
-        getline(stock, Nama_Item);
-        getline(stock, Jumlah);
+        getline(stock, Nama_Item);//format Stock.txt = Nama Item\n 
+        getline(stock, Jumlah);   //                   Jumlah
         Item[i].Nama = Nama_Item;
         Item[i].Jumlah = stoi(Jumlah);
-        cout << Item[i].Nama   << "   "<< i << endl;
-        cout << Item[i].Jumlah << endl;
     }
-
-
-
-
-
-
-    //dont forget to close file
-    profit.close();
-    stock.close();
+    stock.close(); //dont forget to close file
 }
