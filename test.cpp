@@ -8,12 +8,13 @@
 using namespace std;
 
 
-// declare harga
+// declare harga & duit
 const int MAX = 9,
           Harga_Buyer [MAX] = {},
           Harga_Stock [MAX] = {};
 
-int Wallet = 20000;
+int Wallet = 20000; 
+int Money;   // Mr. Krabs : Money! | global var 
 
 // declare struct
 struct structItem {
@@ -21,8 +22,15 @@ struct structItem {
     int Jumlah;
 } Item[MAX]; 
 
-// declare functions
 
+// declare functions
+void saveFile(string filename){
+
+}
+
+void Restock(int pilihan) {
+    pilihan--;
+}
 
 void Beli(int pilihan) {
     pilihan--;
@@ -39,13 +47,41 @@ void Beli(int pilihan) {
 }
 
 void Menu() {
+    int pilihan;
+                 //entry message
 
+
+
+    cin >> pilihan;
+    switch (pilihan)
+    {
+    case 0:
+        return;
+        break;
+    case 1:
+        cin >> pilihan;
+        Beli(pilihan);
+        break;
+    case 2:
+        cout << Money;
+        break;
+    case 3:
+        cin >> pilihan;
+        Restock(pilihan);
+        break;
+    default:
+        cout << "invalid menu";
+        Menu();
+        break;
+    }
+    saveFile("Stock.txt");
+    saveFile("Profit.txt");
+    Menu();
 }
 // main function
 int main() {
-
-    fstream profit, stock;
-    int Money;   // Mr. Krabs : Money!
+    // initialize data from file, Money for profit, structItem for stock
+    ifstream profit, stock;
     string Nama_Item, Jumlah;
     profit.open("Profit.txt");
     profit >> Money; //get the line for MONEYYYYYY
@@ -56,6 +92,16 @@ int main() {
         getline(stock, Jumlah);   //                   Jumlah
         Item[i].Nama = Nama_Item;
         Item[i].Jumlah = stoi(Jumlah);
-    } //dont forget to close file
-    stock.close();
+    }
+    stock.close(); //dont forget to close file
+
+    Menu();
+
+    //give exit message
+    
 }
+
+
+
+
+
