@@ -7,14 +7,12 @@
 #include <string>
 using namespace std;
 
-
 // declare harga & duit
 const int MAX = 9,
           Harga_Buyer [MAX] = {},
           Harga_Stock [MAX] = {};
-
 int Wallet = 20000; //buyer's wallet
-int Money;   // Mr. Krabs : Money! | global var 
+int Money, pilihan;   // Mr. Krabs : Money! | global var 
 
 // declare struct
 struct structItem {
@@ -22,17 +20,7 @@ struct structItem {
     int Jumlah;
 } Item[MAX]; 
 
-
 // declare functions
-
-void viewStock(){ //data is stored in struct not file remember, oh and at the bottom give the line "0. Exit" 
-                 
-    
-
-
-    cout << "\nPilih barang : "; //use this at the end of funct
-}
-
 void Restock(int pilihan) { //specific number of restock
     if (pilihan == 0) return;
     pilihan--; //due to how array works
@@ -42,8 +30,9 @@ void Restock(int pilihan) { //specific number of restock
 
 }
 
-void Beli(int pilihan) {
-    pilihan--;
+void Beli(int pilihan) { //buy 1 item
+    if (pilihan == 0) return;
+    pilihan--; //due to how array works
     if (Item[pilihan].Jumlah == 0){
         cout << "No stock.\n\n";
         return;
@@ -54,10 +43,29 @@ void Beli(int pilihan) {
     }
     Item[pilihan].Jumlah--;
     Wallet -= Harga_Buyer[pilihan];
+    cout << "Transaction completed.\nCurrent balance : " << Money;
+}
+
+void StockPilih(){ //data is stored in struct not file remember, oh and at the bottom give the line "0. Exit" ;
+                                                                   
+                        //give the format like  [1]Name  [2]Name  [3]Name
+                        //                       5 left   4 left   2 left 
+
+                        //                      [4]Name  [5]Name  [6]Name
+                        //                       3 left   2 left   1 left  
+
+                        //                      [7]Name  [8]Name  [9]Name
+                        //                       2 left   4 left   3 left  kinda like an actual vending machine
+                                               
+
+    do {
+        cin >> pilihan;
+        if (pilihan < 0 || pilihan > MAX) cout << "\nInvalid\n"; //countermeasure
+    } while (pilihan < 0 || pilihan > MAX);
+    cout << "\n0.Exit\nPilih barang : "; //use this at the end of funct
 }
 
 void Menu() {
-    int pilihan;
                  //entry message
                  //user's wallet
 
@@ -69,8 +77,7 @@ void Menu() {
         return;
         break;
     case 1: //buy
-        viewStock();
-        cin >> pilihan;
+        StockPilih();
         Beli(pilihan);
         break;
     case 2: //view profit
@@ -79,12 +86,8 @@ void Menu() {
         break;
     case 3: //restock
         do {
-            do {
-                viewStock();
-                cin >> pilihan;
-                if (pilihan < 0 || pilihan > MAX) cout << "Invalid\n"; //countermeasure
-            } while (pilihan < 0 || pilihan > MAX);
-        Restock(pilihan);
+            StockPilih();
+            Restock(pilihan);
         } while (pilihan != 0);
         break;
     default:
