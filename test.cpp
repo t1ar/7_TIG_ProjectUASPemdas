@@ -112,7 +112,7 @@ void StockPilih(){ //data is stored in struct not file remember, oh and at the b
     }
                                                
 
-    
+
     cout << "\n0.Exit";
     do { //pilih
         cout << "\nPilih barang : ";
