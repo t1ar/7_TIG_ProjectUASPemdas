@@ -1,8 +1,8 @@
 Mineral Water
 5
-Some Juice
+Fruit Juice
 5
-CupofCoffee
+Canned Coffee
 5
 Soda
 5
@@ -10,9 +10,9 @@ Milk
 5
 Tea
 5
-This is line 7
+Chocolate
 5
-This is licolatene 8
+Lemonz
 5
-this is line 9
+Energy Drinks
 5
