@@ -192,5 +192,5 @@ int main() {
     warehouse.close();
     
     Menu();
-    cout << "\nGoodbye!\n" 
+    cout << "\nGoodbye!\n"; 
 }
