@@ -76,6 +76,7 @@ void Beli(int pilihan) { //buy 1 item
     }
     Item[pilihan].Jumlah--;
     Wallet -= Item[pilihan].Harga;
+    Money += Item[pilihan].Harga;
     cout << "Transaction completed.\nCurrent balance : " << Wallet;
 }
 
@@ -93,7 +94,7 @@ void StockView(structItem arr[], char confirm){ //data is stored in struct not f
         if (confirm == 'y' || confirm == 'Y') { // 'y' || 'Y' for display, else for no
             cout << "\n";
             for (int j = l; j < (l + 3); ++j) {
-                cout << arr[j].Harga << " left\t\t\t";
+                cout << "Rp." << arr[j].Harga << "        \t\t";
             }
         }
         cout << "\n\n";
@@ -101,17 +102,19 @@ void StockView(structItem arr[], char confirm){ //data is stored in struct not f
 }                                        
 
 void Pilih() {
-    cout << "0.Exit\n\n";
     do { //pilih
-        cout << "Pilih barang : ";
+        cout << "\n\nPilih barang : ";
         cin >> pilihan;
-        if (pilihan < 0 || pilihan > MAX) cout << "\nInvalid\n"; //countermeasure
+        if (pilihan < 0 || pilihan > MAX) cout << "\nInvalid"; //countermeasure
     } while (pilihan < 0 || pilihan > MAX);
 }
 
 void Menu() {
     cout << 
-    R"(Welcome to []'s Vending machine
+    R"(
+
+
+Welcome to []'s Vending machine
     
     1. Buy item
     2. View Profit
@@ -128,18 +131,20 @@ What do you want to do? : )";
     case 1: //buy
         cout << "\n=== Vending Machine ===\n";
         StockView(Item, 'y');
+        cout << "\n0.Exit\n\nYour balance : Rp." << Wallet;
         Pilih();
         Beli(pilihan);
         break;
     case 2: //view profit
-        cout << "Profit : " << Money << endl;
+        cout << "Vending Machine's Profit : Rp." << Money << endl;
         Menu();
         break;
     case 3: //buystock
         cout << "\n=== Storage ===\n";
         StockView(Storage, 'y');
+        cout << "[0] Exit\n\nYour balance : Rp." << Money << endl;
         Pilih();
-
+        //WIP im waiting fajry
         break;
     case 4: //restock
         do {
@@ -147,6 +152,7 @@ What do you want to do? : )";
             StockView(Storage, 'n');
             cout << "\n=== Vending Machine ===\n";
             StockView(Item, 'n');
+            cout << "[0] Exit\n\n";
             Pilih();
             Restock(pilihan);
         } while (pilihan != 0);
