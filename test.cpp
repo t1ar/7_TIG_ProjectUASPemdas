@@ -41,26 +41,26 @@ void Restock(int pilihan) { // specific number of restock
     char confirm;
     cin >> confirm;
     if (confirm != 'y' && confirm != 'Y') {
-        cout << "Restock cancelled.\n\n";
+        cout << "\nRestock cancelled.\n\n";
         return;
     } //fajri, the nested-if fangirl
     if (Storage[pilihan].Nama != Item[pilihan].Nama) { //jri klo barangnya udah pasti sama, ga perlu di looping ber kali" dalam forloop
-        cout << "Not matching in warehouse.\n\n";
+        cout << "\nNot matching in warehouse.\n\n";
+        return;
+    }
+    if (Item[pilihan].Jumlah == 5) { //check first, add later. in case vending machinenya udah penuh dari awal
+        cout << "\nVending machine full.\n\n";
         return;
     }  
-        for(int i = 0; i <= 5; i++) {
-            if (Item[pilihan].Jumlah == 5) { //check first, add later. in case vending machinenya udah penuh dari awal
-                cout << "Vending machine full.\n\n";
-                break; //use break instead of return
-            }
-            if (Storage[pilihan].Jumlah == 0) { 
-                cout << "Out of stock.\n\n";
-                return;
-            }
-            Storage[pilihan].Jumlah--;
-            Item[pilihan].Jumlah++;           
-        }
-        cout << "Restock completed.\n\n";
+    while (Item[pilihan].Jumlah < 5) {      
+        if (Storage[pilihan].Jumlah == 0) { 
+            cout << "\nOut of stock.\n\n";
+            return;
+        };
+        Storage[pilihan].Jumlah--;
+        Item[pilihan].Jumlah++;           
+    }
+        cout << "Restock completed.\n";
 }
 
 void Beli(int pilihan) { //buy 1 item
@@ -124,6 +124,7 @@ Welcome to []'s Vending machine
 
 What do you want to do? : )";             
     cin >> pilihan;
+    cout << pilihan;
     switch (pilihan) {
     case 0: //exit sometime doesnt work idk why
         return;
@@ -135,9 +136,9 @@ What do you want to do? : )";
         Beli(pilihan);
         break;
     case 2: //view profit
-        cout << "\n\nVending Machine's Profit : Rp." << Money << endl;
+        cout << "\n\nVending Machine's Profit : Rp." << Money;
         Menu();
-        break;
+        return;
     case 3: //buystock
         cout << "\n=== Storage ===\n";
         StockView(Storage, 'y');
@@ -160,9 +161,10 @@ What do you want to do? : )";
     default:
         cout << "invalid menu" << endl;
         Menu();
-        break;
+        return;
     }
     //save file after each menu
+    cout << "testes"; //debugging
     ofstream profit("Profit.txt"), stock("Stock.txt"), warehouse("Storage.txt");
     profit << Money;
     profit.close();
