@@ -1,4 +1,4 @@
-//TODO : BUGFIX AND CLEAN UP
+//TODO : BUGFIX AND CLEAN UP a
 
 #include <iostream> //basic io for terminal
 #include <fstream> //file handling for write/read
