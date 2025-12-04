@@ -1,11 +1,4 @@
-//Re-write and clean up the test code, this will be our final file
-//also:
-//(libary)
-//(global vars)
-//(function and struct declration)
-//(main)
-//(function and struct intialization)
-// we gonna make docs for each thing, so it will much better if we liveshare to do the rewrite -t1ar
+//TODO : BUGFIX AND CLEAN UP
 
 #include <iostream> //basic io for terminal
 #include <fstream> //file handling for write/read
@@ -59,10 +52,17 @@ void BuyStock(int pilihan) {
         cout << "Not enough money.\n\n";
         return;
     }
+    cout << "Are you sure to buy " << Storage[pilihan].Nama << " stock? (y/n) : ";
+    char confirm;
+    cin >> confirm;
+    if (confirm != 'y' && confirm != 'Y') {
+        cout << "\nStock purchase cancelled.\n\n";
+        return;
+    }
     
-    Item[pilihan].Jumlah++;
-    Wallet -= Storage[pilihan].Harga;
-    cout << "Restock completed.\nCurrent balance : " << Money;
+    Storage[pilihan].Jumlah++;
+    Money -= Storage[pilihan].Harga;
+    cout << "Stock purchased.\nCurrent balance : Rp." << Money;
 }
 
 void Restock(int pilihan) { // specific number of restock
@@ -105,6 +105,13 @@ void Beli(int pilihan) { //buy 1 item
         cout << "\nNot enough money.";
         return;
     }
+    cout << "Are you sure to buy " << Item[pilihan].Nama << "? (y/n) : ";
+    char confirm;
+    cin >> confirm;
+    if (confirm != 'y' && confirm != 'Y') {
+        cout << "\nPurchase cancelled.\n\n";
+        return;
+    }
     Item[pilihan].Jumlah--;
     Wallet -= Item[pilihan].Harga;
     Money += Item[pilihan].Harga;
@@ -134,7 +141,7 @@ void StockView(structItem arr[], char confirm){ //data is stored in struct not f
 
 void Pilih() {
     do { //pilih
-        cout << "\n\nPilih barang : ";
+        cout << "\n\nPilih barang : "; // TODO : validate whether the input is integer or not
         cin >> pilihan;
         if (pilihan < 0 || pilihan > MAX) cout << "\nInvalid"; //countermeasure
     } while (pilihan < 0 || pilihan > MAX);
@@ -145,7 +152,7 @@ void Menu() {
     R"(
 
 
-Welcome to []'s Vending machine
+Welcome to Lifestream's Vending machine
     
     1. Buy item
     2. View Profit
@@ -178,7 +185,7 @@ What do you want to do? : )";
             StockView(Storage, 'y');
             cout << "[0] Exit\n\nYour balance : Rp." << Money << endl;
             Pilih();
-                //WIP im waiting fajry
+            BuyStock(pilihan);
         } while (pilihan != 0);
         break;
     case 4: //restock
