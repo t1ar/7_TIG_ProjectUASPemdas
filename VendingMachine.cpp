@@ -8,138 +8,55 @@ using namespace std;
 //global variables
 const int MAX = 9;
 int Wallet = 20000;    //buyer's wallet
-int Money, pilihan;   // Mr. Krabs : Money! | global var 
-string Nama_Item, Jumlah, Harga;
+int profitMoney, pilihan;   // Mr. Krabs : Money! | global var 
+string Nama_Item, Jumlah_Item, Harga_Item; //for ifstream
 struct structItem { 
     string Nama;
     int Jumlah;
     int Harga;
-} Item[MAX], Storage[MAX];
+} Vending[MAX], Storage[MAX]; //Item[] for stocks inside Vending machine, Storage[] for stocks inside Warehouse / Storage
 
 //Function declarations
-void BuyStock(int pilihan);
+void Menu();    //Usable
+void BuyVending(int pilihan);
+void BuyStorage(int pilihan);
 void Restock(int pilihan);
-void Beli(int pilihan);
-void StockView(structItem arr[], char confirm);
-void Pilih();
-void Menu();
-void read(structItem arr[], ifstream &yap);
-bool isValidInt(int &input);
+
+void read(ifstream &yap, structItem arr[]); //Technical
+void StockView(structItem arr[], char confirm); 
 bool getConfirmation(string message);
+void Pilih();
+bool isValidInt(int &input);
 
 //main program
 int main() {
     ifstream profit ("Profit.txt"), 
-    stock ("Stock.txt"), 
-    warehouse ("Storage.txt"); // initialize data from file, Money for profit, structItem for stock,
+    VendingMachine ("Stock.txt"), 
+    Warehouse ("Storage.txt"); // initialize data from file,  for profit, structItem for stock,
     
-    profit >> Money; //get the line for MONEYYYYYY
+    profit >> profitMoney; //get the line for MONEYYYYYY
     profit.close();
-    read(Item, stock);
-    stock.close();
-    read(Storage, warehouse);
-    warehouse.close();
+    read(VendingMachine, Vending);
+    VendingMachine.close();
+    read(Warehouse, Storage);
+    Warehouse.close();
     
     Menu();
-    cout << "\nGoodbye!\n"; 
+    cout << "\nGoodbye!\n"; //After Exiting menu, give Exit messages
 }
 
-//Function definitions
 // TODO : CLEAN UP AND DOCUMENTATION
-
-void BuyStock(int pilihan) {
-    if (pilihan == 0) return; //in case of exit
-    pilihan--; //due to how array works
-    if (Money < Storage[pilihan].Harga){
-        cout << "Not enough money.\n\n";
-        return;
+//Function definitions
+//Backend stuff                                               data type 'struct' name ~~~~~v         v~~~~~ struct call variable
+void read(ifstream &yap, structItem arr[]) { //Read the content of Stock / Storage .txt, structItem arr[] | ifstream &yap
+    for (int i = 0; i < MAX; i++) {                                                                         //        ^~~~~~  takes ifstream variable by reference 
+        getline(yap, Nama_Item);     //format .txt    =   Nama Item\n 
+        getline(yap, Jumlah_Item);   //                   Jumlah\n
+        getline(yap, Harga_Item);    //                   Harga\n
+        arr[i].Nama = Nama_Item;
+        arr[i].Jumlah = stoi(Jumlah_Item);
+        arr[i].Harga = stoi(Harga_Item);
     }
-    if (!getConfirmation("Are you sure to buy " + Storage[pilihan].Nama + " stock?")) {
-        cout << "\nStock purchase cancelled.\n\n";
-        return;
-    }
-    
-    Storage[pilihan].Jumlah++;
-    Money -= Storage[pilihan].Harga;
-    cout << "Stock purchased.\nCurrent balance : Rp." << Money;
-}
-
-void Restock(int pilihan) { // specific number of restock
-    if (pilihan == 0) return; //in case of exit
-    pilihan--; //due to how array works
-    if (!getConfirmation("Are you sure to restock " + Item[pilihan].Nama + "?")) {
-        cout << "\nRestock cancelled.\n\n";
-        return;
-    }
-    if (Storage[pilihan].Nama != Item[pilihan].Nama) { //jri klo barangnya udah pasti sama, ga perlu di looping ber kali" dalam forloop
-        cout << "\nNot matching in warehouse.\n\n";
-        return;
-    }
-    if (Item[pilihan].Jumlah == 5) { //check first, add later. in case vending machinenya udah penuh dari awal
-        cout << "\nVending machine full.\n\n";
-        return;
-    }  
-    while (Item[pilihan].Jumlah < 5) {      
-        if (Storage[pilihan].Jumlah == 0) { 
-            cout << "\nOut of stock.\n\n";
-            return;
-        };
-        Storage[pilihan].Jumlah--;
-        Item[pilihan].Jumlah++;           
-    }
-        cout << "Restock completed.\n";
-}
-
-void Beli(int pilihan) { //buy 1 item
-    if (pilihan == 0) return;
-    pilihan--; //due to how array works
-    if (Item[pilihan].Jumlah == 0){
-        cout << "\nNo stock.";
-        return;
-    }
-    if (Wallet < Item[pilihan].Harga){
-        cout << "\nNot enough money.";
-        return;
-    }
-    if (!getConfirmation("Are you sure to buy " + Item[pilihan].Nama + "?")) {
-        cout << "\nPurchase cancelled.\n\n";
-        return;
-    }
-    Item[pilihan].Jumlah--;
-    Wallet -= Item[pilihan].Harga;
-    Money += Item[pilihan].Harga;
-    cout << "Transaction completed.\nCurrent balance : " << Wallet;
-}
-
-void StockView(structItem arr[], char confirm){ //data is stored in struct not file, also needs confirmation whether u want to display price or not
-    for (int l = 0; l < MAX; l += 3) {
-        // print names with index
-        for (int j = l; j < (l + 3); ++j) {
-            cout << "[" << j + 1 << "] " << arr[j].Nama << "\t" ;
-            if (arr[j].Nama.length() < 12) cout << "\t";
-        }
-        cout << '\n';
-        // print quantities
-        for (int j = l; j < (l + 3); ++j) {
-            cout << arr[j].Jumlah << " left\t\t\t";
-        }
-        if (confirm == 'y' || confirm == 'Y') { // 'y' || 'Y' for display, else for no
-            cout << "\n";
-            for (int j = l; j < (l + 3); ++j) {
-                cout << "Rp." << arr[j].Harga << "        \t\t";
-            }
-        }
-        cout << "\n\n";
-    }
-}
-
-bool isValidInt(int &input) {
-    if (cin.fail()) {
-        cin.clear(); //clear error flag
-        cin.ignore(10000, '\n'); //discard invalid input
-        return false;
-    }
-    return true;
 }
 
 bool getConfirmation(string message) {
@@ -154,18 +71,29 @@ bool getConfirmation(string message) {
 
 void Pilih() {
     do { //pilih
-        cout << "\n\nPilih barang : "; // TODO : validate whether the input is integer or not
+        cout << "\n\nPilih barang : ";
         cin >> pilihan;
         if (!isValidInt(pilihan)) {
             cout << "\nInvalid input. Please enter a number.";
             Pilih();
             return;
         }
-        if (pilihan < 0 || pilihan > MAX) cout << "\nInvalid"; //countermeasure
+        if (pilihan < 0 || pilihan > MAX) cout << "\nInvalid"; //countermeasure for invalid num
     } while (pilihan < 0 || pilihan > MAX);
 }
 
-void Menu() {
+bool isValidInt(int &input) {
+    if (cin.fail()) { //check (the last cin) if input = integer
+        cin.clear(); //clear error flag
+        cin.ignore(10000, '\n'); //discard invalid input
+        return false; //if != integer, false
+    }
+    return true;
+}
+
+
+//Real stuff starts here
+void Menu() {   
     cout << 
     R"(
 
@@ -192,23 +120,23 @@ What do you want to do? : )";
     case 1: //buy
         do {
             cout << "\n=== Vending Machine ===\n";
-            StockView(Item, 'y');
+            StockView(Vending, 'y'); // 'y' for display prices
             cout << "\n0.Exit\n\nYour balance : Rp." << Wallet;
             Pilih();
-            Beli(pilihan);
+            BuyVending(pilihan);
         } while (pilihan != 0);
         break;
     case 2: //view profit
-        cout << "\n\nVending Machine's Profit : Rp." << Money;
+        cout << "\n\nVending Machine's Profit : Rp." << profitMoney;
         Menu();
         return;
     case 3: //buystock
         do {
             cout << "\n=== Storage ===\n";
             StockView(Storage, 'y');
-            cout << "[0] Exit\n\nYour balance : Rp." << Money << endl;
+            cout << "[0] Exit\n\nYour balance : Rp." << profitMoney << endl;
             Pilih();
-            BuyStock(pilihan);
+            BuyStorage(pilihan);
         } while (pilihan != 0);
         break;
     case 4: //restock
@@ -216,7 +144,7 @@ What do you want to do? : )";
             cout << "\n=== Storage ===\n";
             StockView(Storage, 'n'); // 'n' for not display prices
             cout << "\n=== Vending Machine ===\n";
-            StockView(Item, 'n');
+            StockView(Vending, 'n');
             cout << "[0] Exit";
             Pilih();
             Restock(pilihan);
@@ -231,10 +159,10 @@ What do you want to do? : )";
     //save file after each menu
     //cout << "testes"; //debugging
     ofstream profit("Profit.txt"), stock("Stock.txt"), warehouse("Storage.txt");
-    profit << Money;
+    profit << profitMoney;
     profit.close();
     for (int i = 0; i < MAX; i++) {
-        stock << Item[i].Nama << endl << Item[i].Jumlah << endl << Item[i].Harga << endl;
+        stock << Vending[i].Nama << endl << Vending[i].Jumlah << endl << Vending[i].Harga << endl;
     }
     stock.close();
     for (int i = 0; i < MAX; i++) {
@@ -244,16 +172,103 @@ What do you want to do? : )";
     Menu(); //recursive
 }
 
-void read(structItem arr[], ifstream &yap) {
-    for (int i = 0; i < MAX; i++) {
-        getline(yap, Nama_Item);//format .txt    =   Nama Item\n 
-        getline(yap, Jumlah);   //                   Jumlah\n
-        getline(yap, Harga);    //                   Harga\n
-        arr[i].Nama = Nama_Item;
-        arr[i].Jumlah = stoi(Jumlah);
-        arr[i].Harga = stoi(Harga);
+void BuyVending(int pilihan) { //buy 1 item as buyer
+    if (pilihan == 0) return;
+    pilihan--; //due to how array works
+    if (Vending[pilihan].Jumlah == 0){
+        cout << "\nNo stock.";
+        return;
     }
+    if (Wallet < Vending[pilihan].Harga){
+        cout << "\nNot enough money.";
+        return;
+    }
+    if (!getConfirmation("Are you sure to buy " + Vending[pilihan].Nama + "?")) {
+        cout << "\nPurchase cancelled.\n\n";
+        return;
+    }
+    Vending[pilihan].Jumlah--;
+    Wallet -= Vending[pilihan].Harga;
+    profitMoney += Vending[pilihan].Harga;
+    cout << "Transaction completed.\nCurrent balance : " << Wallet;
 }
 
+void BuyStorage(int pilihan) { //buy stocks for storage, need specified amount
+    if (pilihan == 0) return; //in case of exit
+    pilihan--; //due to how array works
+    if (profitMoney < Storage[pilihan].Harga){
+        cout << "Not enough money.\n\n";
+        return;
+    }
+    if (!getConfirmation("Are you sure to buy " + Storage[pilihan].Nama + " stock?")) {
+        cout << "\nStock purchase cancelled.\n\n";
+        return;
+    }
+    int amount;
+    do {
+        cout << "Select amount : ";
+        cin >> amount;
+        if (!isValidInt(amount)) {
+            cout << "\n Must be a number.\n\n";
+            continue;
+        }
+        if (amount <= 0){
+            cout << "\nMust be greater than 0.\n\n";
+            continue;
+        }
+        if (Storage[pilihan].Harga * amount > profitMoney) {
+            cout << "\nNot enough money.\n\n";
+        }
+    } while (Storage[pilihan].Harga * amount > profitMoney || amount <= 0);
+    Storage[pilihan].Jumlah += amount;
+    profitMoney -= Storage[pilihan].Harga * amount;
+    cout << "\nStock purchased.\n\nCurrent balance : Rp." << profitMoney;
+}
 
+void Restock(int pilihan) { // specific number of restock
+    if (pilihan == 0) return; //in case of exit
+    pilihan--; //due to how array works
+    if (!getConfirmation("Are you sure to restock " + Vending[pilihan].Nama + "?")) {
+        cout << "\nRestock cancelled.\n\n";
+        return;
+    }
+    if (Storage[pilihan].Nama != Vending[pilihan].Nama) {
+        cout << "\nNot matching in warehouse.\n\n";
+        return;
+    }
+    if (Vending[pilihan].Jumlah == 5) { //check first, add later. in case vending machine already full from the start
+        cout << "\nVending machine full.\n\n";
+        return;
+    }  
+    while (Vending[pilihan].Jumlah < 5) {      
+        if (Storage[pilihan].Jumlah == 0) {  //check item in warehouse 
+            cout << "\nOut of stock.\n\n";
+            return;
+        };
+        Storage[pilihan].Jumlah--;
+        Vending[pilihan].Jumlah++;           
+    }
+        cout << "Restock completed.\n";
+}
 
+void StockView(structItem arr[], char confirm){ //data is stored in struct not file, also needs confirmation whether u want to display price or not
+    for (int l = 0; l < MAX; l += 3) {
+        // print names with j as index
+        for (int j = l; j < (l + 3); ++j) {
+            cout << "[" << j + 1 << "] " << arr[j].Nama << "\t" ; // '\t' for tab spacing 
+            if (arr[j].Nama.length() < 12) cout << "\t";
+        }
+        cout << '\n';
+        // print quantities
+        for (int j = l; j < (l + 3); ++j) {
+            cout << arr[j].Jumlah << " left\t\t\t";
+        }
+        if (confirm == 'y' || confirm == 'Y') { // 'y' || 'Y' for display, else for no
+            cout << "\n";
+            for (int j = l; j < (l + 3); ++j) {
+                cout << "Rp." << arr[j].Harga << "        \t\t";
+            }
+        }
+        cout << "\n\n";
+    }
+}
