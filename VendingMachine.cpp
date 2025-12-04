@@ -116,6 +116,7 @@ void StockView(structItem arr[], char confirm){ //data is stored in struct not f
         // print names with index
         for (int j = l; j < (l + 3); ++j) {
             cout << "[" << j + 1 << "] " << arr[j].Nama << "\t" ;
+            if (arr[j].Nama.length() < 12) cout << "\t";
         }
         cout << '\n';
         // print quantities
