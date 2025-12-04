@@ -228,10 +228,6 @@ void BuyStorage(int pilihan) { //buy stocks for storage, need specified amount
 void Restock(int pilihan) { // specific number of restock
     if (pilihan == 0) return; //in case of exit
     pilihan--; //due to how array works
-    if (!getConfirmation("Are you sure to restock " + Vending[pilihan].Nama + "?")) {
-        cout << "\nRestock cancelled.\n\n";
-        return;
-    }
     if (Storage[pilihan].Nama != Vending[pilihan].Nama) {
         cout << "\nNot matching in warehouse.\n\n";
         return;
@@ -240,6 +236,10 @@ void Restock(int pilihan) { // specific number of restock
         cout << "\nVending machine full.\n\n";
         return;
     }  
+    if (!getConfirmation("Are you sure to restock " + Vending[pilihan].Nama + "?")) {
+        cout << "\nRestock cancelled.\n\n";
+        return;
+    }
     while (Vending[pilihan].Jumlah < 5) {      
         if (Storage[pilihan].Jumlah == 0) {  //check item in warehouse 
             cout << "\nOut of stock.\n\n";
