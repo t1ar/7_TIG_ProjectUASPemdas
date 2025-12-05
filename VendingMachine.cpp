@@ -16,7 +16,7 @@ using namespace std;
 //global variables
 const int MAX = 9;
 int Wallet = 20000;    //buyer's wallet
-int profitMoney, pilihan;   // Mr. Krabs : Money! | global var 
+int profitMoney, pilihan;   // Mr. Krabs : Money!  
 string Nama_Item, Jumlah_Item, Harga_Item; //for ifstream
 struct structItem { 
     string Nama;
