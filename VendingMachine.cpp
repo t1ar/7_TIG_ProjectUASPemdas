@@ -190,7 +190,7 @@ void BuyVending(int pilihan) { //buy 1 item as buyer
     Vending[pilihan].Jumlah--;
     Wallet -= Vending[pilihan].Harga;
     profitMoney += Vending[pilihan].Harga;
-    cout << "Transaction completed.\nCurrent balance : " << Wallet;
+    cout << "Transaction completed.\nCurrent balance : " << Wallet << "\n";
 }
 
 void BuyStorage(int pilihan) { //buy stocks for storage, need specified amount
