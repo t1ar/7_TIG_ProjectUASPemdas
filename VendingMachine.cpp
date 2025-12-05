@@ -98,6 +98,28 @@ bool isValidInt(int &input) { //set &input datatype as int
     return true;
 }
 
+void StockView(structItem arr[], char confirm){ //data is stored in struct not file, also needs confirmation whether u want to display price or not
+    for (int l = 0; l < MAX; l += 3) {
+        // print names with j as index
+        for (int j = l; j < (l + 3); ++j) {
+            cout << "[" << j + 1 << "] " << arr[j].Nama << "\t" ; // '\t' for tab spacing 
+            if (arr[j].Nama.length() < 12) cout << "\t";
+        }
+        cout << '\n';
+        // print quantities
+        for (int j = l; j < (l + 3); ++j) {
+            cout << arr[j].Jumlah << " left\t\t\t";
+        }
+        if (confirm == 'y' || confirm == 'Y') { // 'y' || 'Y' for display, else for no
+            cout << "\n";
+            for (int j = l; j < (l + 3); ++j) {
+                cout << "Rp." << arr[j].Harga << "        \t\t";
+            }
+        }
+        cout << "\n\n";
+    }
+}
+
 
 //Real stuff starts here
 void Menu() {   
@@ -256,26 +278,4 @@ void Restock(int pilihan) { // specific number of restock
         Vending[pilihan].Jumlah++;           
     }
         cout << "Restock completed.\n";
-}
-
-void StockView(structItem arr[], char confirm){ //data is stored in struct not file, also needs confirmation whether u want to display price or not
-    for (int l = 0; l < MAX; l += 3) {
-        // print names with j as index
-        for (int j = l; j < (l + 3); ++j) {
-            cout << "[" << j + 1 << "] " << arr[j].Nama << "\t" ; // '\t' for tab spacing 
-            if (arr[j].Nama.length() < 12) cout << "\t";
-        }
-        cout << '\n';
-        // print quantities
-        for (int j = l; j < (l + 3); ++j) {
-            cout << arr[j].Jumlah << " left\t\t\t";
-        }
-        if (confirm == 'y' || confirm == 'Y') { // 'y' || 'Y' for display, else for no
-            cout << "\n";
-            for (int j = l; j < (l + 3); ++j) {
-                cout << "Rp." << arr[j].Harga << "        \t\t";
-            }
-        }
-        cout << "\n\n";
-    }
 }
