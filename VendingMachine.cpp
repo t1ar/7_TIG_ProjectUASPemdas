@@ -78,7 +78,7 @@ bool getConfirmation(string message) {
 
 void Pilih() {
     do { //pilih
-        cout << "\n\nPilih barang : ";
+        cout << "\n\nPick item : ";
         cin >> pilihan;
         if (!isValidInt(pilihan)) {
             cout << "\nInvalid input. Please enter a number.";
@@ -150,7 +150,7 @@ What do you want to do? : )";
         do {
             cout << "\n=== Vending Machine ===\n";
             StockView(Vending, 'y'); // 'y' for display prices
-            cout << "\n0.Exit\n\nYour balance : Rp." << Wallet;
+            cout << "\n[0] Exit\n\nYour balance : Rp." << Wallet;
             Pilih();
             BuyVending(pilihan);
         } while (pilihan != 0);

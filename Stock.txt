@@ -5,7 +5,7 @@ Some Juice
 5
 4500
 Canned Coffee
-3
+5
 7000
 Sparkling Soda
 5
@@ -23,5 +23,5 @@ Lemonz
 5
 5000
 AirDoa
-5
+4
 20000
