@@ -22,7 +22,7 @@ struct structItem {
     string Nama;
     int Jumlah;
     int Harga;
-} Vending[MAX], Storage[MAX]; //Item[] for stocks inside Vending machine, Storage[] for stocks inside Warehouse / Storage
+} Vending[MAX], Storage[MAX]; //Vending[] for stocks inside Vending machine, Storage[] for stocks inside Warehouse / Storage
 
 //Function declarations
 void Menu();    //Usable
@@ -144,9 +144,9 @@ What do you want to do? : )";
         return;
     }
     switch (pilihan) {
-    case 0: //exit sometime doesnt work idk why
+    case 0: //exit
         return;
-    case 1: //buy
+    case 1: //buy inside vending machine
         do {
             cout << "\n=== Vending Machine ===\n";
             StockView(Vending, 'y'); // 'y' for display prices
@@ -159,14 +159,14 @@ What do you want to do? : )";
         cout << "\n\nVending Machine's Profit : Rp." << profitMoney;
         Menu();
         return;
-    case 3: //buystock
+    case 3: //buystock for storage
         do {
             cout << "\n=== Storage ===\n";
             StockView(Storage, 'y');
             cout << "[0] Exit\n\nYour balance : Rp." << profitMoney << endl;
             Pilih();
             BuyStorage(pilihan);
-        } while (pilihan != 0);
+        } while (pilihan != 0); //keep looping until exit
         break;
     case 4: //restock
         do {
@@ -185,9 +185,8 @@ What do you want to do? : )";
         Menu();
         return;
     }
-    //save file after each menu
-    //cout << "testes"; //debugging
-    ofstream profit("Profit.txt"), stock("Stock.txt"), warehouse("Storage.txt");
+    //save file after each menu preventing data loss due to premature termination
+    ofstream profit("Profit.txt"), stock("Stock.txt"), warehouse("Storage.txt"); //write back to file
     profit << profitMoney;
     profit.close();
     for (int i = 0; i < MAX; i++) {
@@ -244,9 +243,9 @@ void BuyStorage(int pilihan) { //buy stocks for storage, need specified amount
         if (Storage[pilihan].Harga * amount > profitMoney) {
             cout << "\nNot enough money.\n\n";
         }
-    } while (Storage[pilihan].Harga * amount > profitMoney || amount <= 0);
+    } while (Storage[pilihan].Harga * amount > profitMoney || amount <= 0); //countermeasure for invalid num
     if (!getConfirmation("Are you sure to buy " + to_string(amount) + " unit(s) of " + Storage[pilihan].Nama + " ?")) {
-        cout << "\nStock purchase cancelled.\n\n";
+        cout << "\nStock purchase cancelled.\n\n";  // ^~~~~ amount is integer, need to convert to string. since parameter is string and int + string = invalid
         return;
     }   
     Storage[pilihan].Jumlah += amount;
